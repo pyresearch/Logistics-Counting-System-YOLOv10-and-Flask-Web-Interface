@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Management - Video Feed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .counts {
+            margin-top: 20px;
+            text-align: center;
+        }
+        img {
+            border: 5px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Logistics Management Video Feed</h1>
+    </header>
+
+    <div class="container">
+        <h2>Live Object Detection Feed</h2>
+        <img src="{{ url_for('video_feed') }}" width="800" alt="Video Feed">
+
+        <div class="counts">
+            <h3>Detected Objects:</h3>
+            <ul id="object-counts">
+                <!-- Object counts will be populated here via JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Logistics Management System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function updateObjectCounts() {
+            fetch('/object_counts')
+                .then(response => response.json())
+                .then(data => {
+                    const countsList = document.getElementById('object-counts');
+                    countsList.innerHTML = '';
+                    for (const [object, count] of Object.entries(data)) {
+                        const li = document.createElement('li');
+                        li.textContent = `${object}: ${count}`;
+                        countsList.appendChild(li);
+                    }
+                });
+        }
+
+        // Update object counts every 1 second
+        setInterval(updateObjectCounts, 1000);
+    </script>
+</body>
+</html>
